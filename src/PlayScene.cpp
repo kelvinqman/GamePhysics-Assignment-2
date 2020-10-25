@@ -190,7 +190,7 @@ void PlayScene::start()
 	m_pCrateLoot->setAngle(theta);
 }
 
-void PlayScene::GUI_Function() const
+void PlayScene::GUI_Function()
 {
 	// Always open with a NewFrame
 	ImGui::NewFrame();
@@ -208,14 +208,25 @@ void PlayScene::GUI_Function() const
 
 	ImGui::Separator();
 
-	static float float3[3] = { 0.0f, 1.0f, 1.5f };
-	if(ImGui::SliderFloat3("My Slider", float3, 0.0f, 2.0f))
-	{
-		std::cout << float3[0] << std::endl;
-		std::cout << float3[1] << std::endl;
-		std::cout << float3[2] << std::endl;
-		std::cout << "---------------------------\n";
-	}
+	// PlayScene.cpp -> GUI_Function()
+	std::string strm = " " + std::to_string(m_pCrateLoot->getMass());
+	const char* cstrm = strm.c_str();
+	ImGui::LabelText("Mass", cstrm);
+	std::string strf = " " + std::to_string(getForce());
+	const char* cstrf = strf.c_str();
+	ImGui::LabelText("Force", cstrf);
+	std::string str1 = " X: " + std::to_string(m_pCrateLoot->getTransform()->position.x)
+		+ " Y: " + std::to_string(m_pCrateLoot->getTransform()->position.y);
+	const char* cstr1 = str1.c_str();
+	ImGui::LabelText("Position", cstr1);
+	std::string str2 = " X: " + std::to_string(m_pCrateLoot->getRigidBody()->velocity.x)
+		+ " Y: " + std::to_string(m_pCrateLoot->getRigidBody()->velocity.y);
+	const char* cstr2 = str2.c_str();
+	ImGui::LabelText("Velocity", cstr2);
+	std::string str3 = " X: " + std::to_string(m_pCrateLoot->getRigidBody()->acceleration.x)
+		+ " Y: " + std::to_string(m_pCrateLoot->getRigidBody()->acceleration.y);
+	const char* cstr3 = str3.c_str();
+	ImGui::LabelText("Acceleration", cstr3);
 	
 	ImGui::End();
 
@@ -233,4 +244,13 @@ void PlayScene::drawRamp()
 	Util::DrawLine(vertice1, vertice2, glm::vec4(0.0f, 100.0f, 100.0f, 0.0f));
 	// Ramp line
 	Util::DrawLine(vertice2, vertice3, glm::vec4(0.0f, 100.0f, 100.0f, 0.0f));
+}
+
+// PlayScene.cpp -> memeber function
+float PlayScene::getForce()
+{
+	if (m_pCrateLoot->getTransform()->position.y < 400 - 20)
+		return m_pCrateLoot->getMass() * (-9.8) * (-sin(theta / 180 * 3.14));
+	else
+		return m_pCrateLoot->getMass() * (-9.8) * m_pCrateLoot->getCokf();
 }
