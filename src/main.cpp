@@ -19,7 +19,8 @@ int main(int argc, char * args[])
 	freopen("CON", "w", stdout);
 
 
-	TheGame::Instance()->init("SDLEngine 0.24", 100, 100, 800, 600, false);
+	// main.cpp -> main() Set appropriate scale and variables
+	TheGame::Instance()->init("SDLEngine 0.24", 100, 100, 1400, 600, false);
 
 	while (TheGame::Instance()->isRunning())
 	{
