@@ -19,6 +19,10 @@ public:
 	void setMass(float m) { mass = m; }
 	float getCokf() { return cokf; }
 	void setCokf(float c) { cokf = c; }
+	// Target.h -> public: Move according to the problem
+	float getFlatAcceleration() { return -9.8 * cokf; }
+	// Target.h -> public:
+	void toMove(float theta);
 private:
 	void m_move();
 	void m_checkBounds();

@@ -26,6 +26,8 @@ void PlayScene::draw()
 
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+	// PlayScene.cpp -> draw()
+	drawRamp();
 }
 
 void PlayScene::update()
@@ -124,15 +126,17 @@ void PlayScene::start()
 	// Plane Sprite
 	m_pPlaneSprite = new Plane();
 	addChild(m_pPlaneSprite);
+	m_pPlaneSprite->getTransform()->position.x = -200;
 
 	// Player Sprite
 	m_pPlayer = new Player();
 	addChild(m_pPlayer);
+	m_pPlayer->getTransform()->position.x = -200;
 	m_playerFacingRight = true;
 
 	// Back Button
 	m_pBackButton = new Button("../Assets/textures/backButton.png", "backButton", BACK_BUTTON);
-	m_pBackButton->getTransform()->position = glm::vec2(300.0f, 400.0f);
+	m_pBackButton->getTransform()->position = glm::vec2(300.0f, 500.0f);
 	m_pBackButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pBackButton->setActive(false);
@@ -152,7 +156,7 @@ void PlayScene::start()
 
 	// Next Button
 	m_pNextButton = new Button("../Assets/textures/nextButton.png", "nextButton", NEXT_BUTTON);
-	m_pNextButton->getTransform()->position = glm::vec2(500.0f, 400.0f);
+	m_pNextButton->getTransform()->position = glm::vec2(500.0f, 500.0f);
 	m_pNextButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pNextButton->setActive(false);
@@ -173,11 +177,17 @@ void PlayScene::start()
 
 	/* Instructions Label */
 	m_pInstructionsLabel = new Label("Press the backtick (`) character to toggle Debug View", "Consolas");
-	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 500.0f);
+	m_pInstructionsLabel->getTransform()->position = glm::vec2(Config::SCREEN_WIDTH * 0.5f, 550.0f);
 
 	addChild(m_pInstructionsLabel);
 	// PlayScene.cpp -> start() Add background image
 	TextureManager::Instance()->load("../Assets/textures/background.png", "background");
+	// PlayScene.cpp -> start() 
+	m_pCrateLoot = new Target;
+	addChild(m_pCrateLoot);
+	m_pCrateLoot->getTransform()->position.x = position - sin(theta) * 20;
+	m_pCrateLoot->getTransform()->position.y = 400 - height - cos(theta) * 20;
+	m_pCrateLoot->setAngle(theta);
 }
 
 void PlayScene::GUI_Function() const
@@ -190,9 +200,10 @@ void PlayScene::GUI_Function() const
 	
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
-	if(ImGui::Button("My Button"))
+	// PlayScene.cpp -> GUI_Function()
+	if (ImGui::Button("Start moving"))
 	{
-		std::cout << "My Button Pressed" << std::endl;
+		m_pCrateLoot->toMove(theta);
 	}
 
 	ImGui::Separator();
@@ -212,4 +223,14 @@ void PlayScene::GUI_Function() const
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 	ImGui::StyleColorsDark();
+}
+// PlayScene.cpp -> member function
+void PlayScene::drawRamp()
+{
+	// Bottom line
+	Util::DrawLine(vertice1, vertice3, glm::vec4(0.0f, 100.0f, 100.0f, 0.0f));
+	// Left line
+	Util::DrawLine(vertice1, vertice2, glm::vec4(0.0f, 100.0f, 100.0f, 0.0f));
+	// Ramp line
+	Util::DrawLine(vertice2, vertice3, glm::vec4(0.0f, 100.0f, 100.0f, 0.0f));
 }

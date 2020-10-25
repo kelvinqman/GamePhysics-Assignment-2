@@ -26,6 +26,8 @@ public:
 	void setPosition(float p) { position = p; }
 	void setWidth(float w) { width = w; }
 	void setHeight(float h) { height = h; }
+	// PlayScene.h -> public:
+	void drawRamp();
 private:
 	// IMGUI Function
 	void GUI_Function() const;
