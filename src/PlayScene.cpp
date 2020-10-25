@@ -33,6 +33,8 @@ void PlayScene::draw()
 void PlayScene::update()
 {
 	updateDisplayList();
+	// PlayScene.cpp -> update()
+	updateVertices();
 }
 
 void PlayScene::clean()
@@ -201,8 +203,16 @@ void PlayScene::GUI_Function()
 	ImGui::Begin("Your Window Title Goes Here", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
 	// PlayScene.cpp -> GUI_Function()
-	if (ImGui::Button("Start moving"))
+	if (ImGui::Button("Move according problem"))
 	{
+		position = 100.0f;
+		width = 400.0f;
+		height = 300.0f;
+		updateTheta();
+		m_pCrateLoot->setAngle(theta);
+		m_pCrateLoot->setMass(12.8);
+		m_pCrateLoot->setCokf(0.42);
+		updateCrate();
 		m_pCrateLoot->toMove(theta);
 	}
 
@@ -228,6 +238,38 @@ void PlayScene::GUI_Function()
 	const char* cstr3 = str3.c_str();
 	ImGui::LabelText("Acceleration", cstr3);
 	
+	// PlayScene.cpp -> GUI_Function()
+	static float posTemp[1] = { position };
+	if (ImGui::SliderFloat("Position", posTemp, 0.0f, 800.0f)) {
+		setPosition(posTemp[0]);
+		updateCrate();
+	}
+	static float wTemp[1] = { width };
+	if (ImGui::SliderFloat("Width", wTemp, 0.0f, 300.0f)) {
+		setWidth(wTemp[0]);
+		updateCrate();
+	}
+	static float hTemp[1] = { height };
+	if (ImGui::SliderFloat("Height", hTemp, 0.0f, 300.0f)) {
+		setHeight(hTemp[0]);
+		updateCrate();
+	}
+	static float mTemp[1] = { m_pCrateLoot->getMass() };
+	if (ImGui::SliderFloat("Mass", mTemp, 0.0f, 100.0f)) {
+		m_pCrateLoot->setMass(mTemp[0]);
+	}
+	static float cTemp[1] = { m_pCrateLoot->getCokf() };
+	if (ImGui::SliderFloat("Coefficient of kinetic friction", cTemp, 0.0f, 20.0f)) {
+		m_pCrateLoot->setCokf(cTemp[0]);
+	}
+	if (ImGui::Button("Moving with manipulcated variables")) {
+		updateCrate();
+		m_pCrateLoot->MoveManipulate();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("reset")) {
+		updateCrate();
+	}
 	ImGui::End();
 
 	// Don't Remove this
@@ -253,4 +295,20 @@ float PlayScene::getForce()
 		return m_pCrateLoot->getMass() * (-9.8) * (-sin(theta / 180 * 3.14));
 	else
 		return m_pCrateLoot->getMass() * (-9.8) * m_pCrateLoot->getCokf();
+}
+// PlayScene.cpp -> memeber function
+void PlayScene::updateVertices()
+{
+	vertice1 = { position,400.0f };
+	vertice2 = { vertice1.x,vertice1.y - height };
+	vertice3 = { vertice1.x + width,vertice1.y };
+}
+
+void PlayScene::updateCrate()
+{
+	updateTheta();
+	float temp = theta / 180 * 3.14;
+	m_pCrateLoot->getTransform()->position.x = position + sin(temp) * 20;
+	m_pCrateLoot->getTransform()->position.y = 400 - height - cos(temp) * 20;
+	m_pCrateLoot->setAngle(theta);
 }

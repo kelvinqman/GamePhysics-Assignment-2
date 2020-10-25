@@ -29,7 +29,11 @@ public:
 	// PlayScene.h -> public:
 	void drawRamp();
 	// PlayScene.h -> public: Label key statistics
-		float getForce();
+	float getForce();
+	// PlayScene.h -> public:
+	void updateVertices();
+	void updateCrate();
+	void updateTheta() { theta = atan(height / width) * 180 / 3.14; }
 private:
 	// IMGUI Function
 	void GUI_Function();

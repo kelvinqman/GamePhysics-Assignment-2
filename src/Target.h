@@ -23,6 +23,8 @@ public:
 	float getFlatAcceleration() { return -9.8 * cokf; }
 	// Target.h -> public:
 	void toMove(float theta);
+	// Target.h -> public: Allow user to Change variables
+	void MoveManipulate();
 private:
 	void m_move();
 	void m_checkBounds();

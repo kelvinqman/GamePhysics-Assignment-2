@@ -73,3 +73,10 @@ void Target::toMove(float theta)
 	getRigidBody()->acceleration.x = cos(36.87 / 180 * 3.14) * 5.88;
 	getRigidBody()->acceleration.y = sin(36.87 / 180 * 3.14) * 5.88;
 }
+// Target.cpp -> member function
+void Target::MoveManipulate()
+{
+	float a = 9.8 * sin(angle / 180 * 3.14);
+	getRigidBody()->acceleration.x = cos(angle / 180 * 3.14) * a;
+	getRigidBody()->acceleration.y = sin(angle / 180 * 3.14) * a;
+}
