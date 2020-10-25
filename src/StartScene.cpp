@@ -80,6 +80,12 @@ void StartScene::start()
 	});
 	addChild(m_pStartButton);
 
-	
+	// StartScene.cpp -> start()
+	m_pTeamMember1 = new Label("Xin, Lyu 101240247", "Consolas", 20, blue, glm::vec2(400.0f, 160.0f));
+	m_pTeamMember1->setParent(this);
+	addChild(m_pTeamMember1);
+	m_pTeamMember2 = new Label("Tianhong, Lin 101273810", "Consolas", 20, blue, glm::vec2(400.0f, 180.0f));
+	m_pTeamMember2->setParent(this);
+	addChild(m_pTeamMember2);
 }
 
